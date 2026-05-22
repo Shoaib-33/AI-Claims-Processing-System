@@ -31,37 +31,37 @@ This project automates the first-pass claims workflow. It extracts key data from
 
 ```mermaid
 flowchart TD
-    U[User uploads invoice PDF] --> F[Claim form UI]
-    F --> X[/api/extract-invoice]
-    X --> P[PyMuPDF text extraction]
-    P --> Q{Enough fields found?}
-    Q -- Yes --> A[Prefill name, address, date, facility, reason, amount]
-    Q -- No --> D[Docling conversion]
-    D --> T{Readable fields found?}
-    T -- No --> O[Tesseract OCR fallback]
-    O --> L[LangChain structured extraction]
-    T -- Yes --> A
+    U["User uploads invoice PDF"] --> F["Claim form UI"]
+    F --> X["/api/extract-invoice"]
+    X --> P["PyMuPDF text extraction"]
+    P --> Q{"Enough fields found?"}
+    Q -- "Yes" --> A["Prefill name, address, date, facility, reason, amount"]
+    Q -- "No" --> D["Docling conversion"]
+    D --> T{"Readable fields found?"}
+    T -- "No" --> O["Tesseract OCR fallback"]
+    O --> L["LangChain structured extraction"]
+    T -- "Yes" --> A
     L --> A
-    A --> S[User reviews and submits claim]
-    S --> C[/api/process-claim]
-    C --> EC[Exact claim cache]
-    EC --> SC[Semantic cache: memory or Redis]
-    SC --> R[LLM retrieval router]
-    R --> H[HyDE, multi-query, step-back query plan]
-    H --> HR[Hybrid policy retrieval]
-    HR --> BM[BM25 sparse search]
-    HR --> VS[FAISS dense search]
-    BM --> RRF[Reciprocal Rank Fusion]
+    A --> S["User reviews and submits claim"]
+    S --> C["/api/process-claim"]
+    C --> EC["Exact claim cache"]
+    EC --> SC["Semantic cache: memory or Redis"]
+    SC --> R["LLM retrieval router"]
+    R --> H["HyDE, multi-query, step-back query plan"]
+    H --> HR["Hybrid policy retrieval"]
+    HR --> BM["BM25 sparse search"]
+    HR --> VS["FAISS dense search"]
+    BM --> RRF["Reciprocal Rank Fusion"]
     VS --> RRF
-    RRF --> RR[FlashRank reranker]
-    RR --> DD[Initial decision draft and confidence]
-    DD --> G{Confidence below Self-RAG threshold?}
-    G -- No --> REP[Return report and policy evidence]
-    G -- Yes --> SR[Self-RAG evidence grade]
-    SR --> M{Evidence missing?}
-    M -- Yes --> HR
-    M -- No --> V[Final grounding verifier]
-    V --> W[Verified report writer]
+    RRF --> RR["FlashRank reranker"]
+    RR --> DD["Initial decision draft and confidence"]
+    DD --> G{"Confidence below Self-RAG threshold?"}
+    G -- "No" --> REP["Return report and policy evidence"]
+    G -- "Yes" --> SR["Self-RAG evidence grade"]
+    SR --> M{"Evidence missing?"}
+    M -- "Yes" --> HR
+    M -- "No" --> V["Final grounding verifier"]
+    V --> W["Verified report writer"]
     W --> REP
 ```
 
