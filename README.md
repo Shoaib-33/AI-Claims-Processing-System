@@ -1,7 +1,5 @@
 # AI Claims Processing System
 
-# AI Claims Processing System
-
 Health insurance claim processing is often a slow and document-intensive workflow that requires reviewing medical invoices, validating claim details, interpreting policy documents, and making consistent decisions under uncertainty.AI Claims Processing System is an AI-powered claims adjudication assistant designed to streamline this process. Users can upload hospital invoices, review automatically extracted claim information, and receive a structured claim decision supported by relevant policy evidence.The system combines FastAPI for backend services, modern frontend interfaces for user interaction, OCR-based document extraction for invoice understanding, and an advanced retrieval-augmented generation (RAG) pipeline with hybrid search, reranking, and self-verification to improve decision reliability. To optimize performance and repeated workflows, the architecture also incorporates intelligent caching and optional Redis-based semantic caching.
 
 This project demonstrates how modern AI systems can reduce manual operational effort, improve consistency, and accelerate first-pass insurance claim assessment while preserving human oversight for uncertain cases.
