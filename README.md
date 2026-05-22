@@ -1,15 +1,20 @@
 # AI Claims Processing System
 
-Health insurance claim processing is often a slow, repetitive, and document-intensive workflow. Traditionally, claim reviewers must manually inspect hospital invoices, extract treatment and billing details, search through lengthy insurance policy documents, verify whether the claimed procedures are covered, and justify approval or rejection decisions based on scattered evidence. This process is time-consuming, operationally expensive, and prone to inconsistencies, especially when policy wording is complex or claim information is incomplete.
-
+Health insurance claim processing is often slow, repetitive, and document-heavy. Traditionally, claim reviewers must manually inspect hospital invoices, extract treatment and billing details, search through lengthy insurance policy documents, verify coverage conditions, and justify approval or rejection decisions. This process is time-consuming, costly, and prone to inconsistencies, especially when policy wording is complex or claim details are incomplete.
 AI Claims Processing System is an AI-powered claims adjudication assistant designed to automate this first-pass review workflow.
-Unlike a basic RAG chatbot that simply retrieves documents and generates responses, this system follows a more rigorous evidence-driven verification pipeline. Users upload hospital invoices, from which OCR extracts structured claim details such as treatment information, provider details, dates, and billing amounts. These extracted details are then validated and used to query insurance policy documents through an advanced retrieval pipeline combining hybrid search (BM25 + semantic retrieval), cross-encoder reranking, query refinement, and Self-RAG style self-verification.
-The system does not rely on a single retrieval pass. Instead, it performs multiple evidence checks by cross-referencing the extracted claim details against relevant policy clauses, validating whether treatments and expenses actually align with coverage conditions, exclusions, and claim rules before generating a decision. If the retrieved evidence is weak or conflicting, the system routes the case for human review instead of producing an unreliable verdict.
-Built with FastAPI, OCR-based document extraction, vector retrieval infrastructure, intelligent caching (including optional Redis semantic caching), and a modern interactive frontend, the platform significantly reduces manual review effort and speeds up claim assessment while maintaining reliability and human oversight.
+Rather than functioning as a simple document Q&A system, the platform uses a multi-stage evidence verification pipeline. Hospital invoices are processed through OCR and structured extraction to capture claim details, which are then matched against insurance policy documents using an advanced retrieval architecture combining hybrid search (BM25 + semantic retrieval), query rewriting, cross-encoder reranking, and Self-RAG style verification.
 
-## What This Project Solves
+Instead of relying on a single retrieval step, the system performs multiple evidence validation passes—cross-checking treatments, billing details, exclusions, and coverage rules against the policy document before generating a structured claim verdict. If evidence is weak, conflicting, or insufficient, the system escalates the case for human review rather than producing an unreliable decision.
 
-This project transforms a process that could previously take significant manual effort per claim into an automated AI-assisted workflow capable of delivering faster, evidence-backed first-pass decisions. By combining advanced retrieval, multi-stage verification, and human escalation, it improves consistency, reduces operational overhead, and accelerates insurance claim processing without compromising decision quality.
+Built with FastAPI, LangChain, FAISS, FlashRank, OCR pipelines, intelligent caching, and optional Redis semantic caching, the platform significantly reduces manual effort and accelerates claim assessment while maintaining decision reliability and human oversight.
+
+  <h2>Key Impact</h2>
+  <ul>
+    <li>Automates first-pass insurance claim review</li>
+    <li>Reduces manual document analysis time</li>
+    <li>Improves decision consistency through evidence-backed validation</li>
+    <li>Adds human-in-the-loop escalation for uncertain cases</li>
+  </ul>
 
 Project Demo: https://www.loom.com/share/802c0e92627c4974ad695998c72634f9
 
