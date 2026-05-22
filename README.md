@@ -4,6 +4,9 @@ Health insurance claim processing is often a slow and document-intensive workflo
 
 This project demonstrates how modern AI systems can reduce manual operational effort, improve consistency, and accelerate first-pass insurance claim assessment while preserving human oversight for uncertain cases.
 
+Project Demo at https://www.loom.com/share/802c0e92627c4974ad695998c72634f9
+
+
 ## Problem Statement
 
 Health insurance claim review is slow and error-prone when staff must manually read hospital invoices, re-enter claim details, search long policy documents, and explain why a claim is approved, rejected, or sent for review.
