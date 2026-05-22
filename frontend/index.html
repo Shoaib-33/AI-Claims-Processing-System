@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insurance Claims</title>
+    <link rel="stylesheet" href="/static/styles.css?v=blank-claim-form-v1" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="intro-pane">
+        <div class="intro-content">
+          <h1>Insurance Claims</h1>
+          <p>Please provide accurate information to verify your claim.</p>
+          <div class="shield-art" aria-hidden="true">
+            <div class="shield">
+              <div class="key-ring"></div>
+              <div class="key-stem"></div>
+              <div class="key-bit"></div>
+            </div>
+            <div class="check-bubble">✓</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="claim-pane">
+        <form id="claim-form" class="claim-form">
+          <label class="full">
+            <span>Submit claim for</span>
+            <input id="patient_name" name="patient_name" type="text" placeholder="Patient name" required />
+          </label>
+
+          <label>
+            <span>Claim item</span>
+            <select id="claim_item" name="claim_item" required>
+              <option value="" selected disabled>Select claim item</option>
+              <option>General Practitioner</option>
+              <option>Outpatient Consultation</option>
+              <option>Medicine</option>
+              <option>Diagnostic Test</option>
+              <option>Hospital Treatment</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Claim Reason</span>
+            <input id="claim_reason" name="claim_reason" type="text" placeholder="Claim reason" required />
+          </label>
+
+          <label class="full">
+            <span>Patient Address</span>
+            <input id="patient_address" name="patient_address" type="text" placeholder="Patient address" required />
+          </label>
+
+          <label>
+            <span>Date of treatment</span>
+            <input id="date_of_treatment" name="date_of_treatment" type="date" required />
+          </label>
+
+          <span></span>
+
+          <label>
+            <span>Medical Facility</span>
+            <input id="medical_facility" name="medical_facility" type="text" placeholder="Medical facility" required />
+          </label>
+
+          <label>
+            <span>Claim Amount</span>
+            <input id="claim_amount" name="claim_amount" type="number" min="0" step="0.01" placeholder="Claim amount" required />
+          </label>
+
+          <div class="upload-box full">
+            <div>
+              <strong>Make sure your payment receipt includes:</strong>
+              <ul>
+                <li>The patient's name</li>
+                <li>Treatment date</li>
+                <li>Medical facility</li>
+                <li>Total amount charged</li>
+              </ul>
+            </div>
+            <label class="file-control">
+              <input id="invoice" name="invoice" type="file" accept=".pdf,.png,.jpg,.jpeg" />
+              <span>Upload invoice PDF</span>
+            </label>
+            <p id="upload-status" class="upload-status"></p>
+          </div>
+
+          <button id="submit-btn" class="submit-btn" type="submit">Process Claim</button>
+        </form>
+
+        <section id="result" class="result-panel" hidden>
+          <div class="report">
+            <h2>Executive Summary</h2>
+            <p id="r-executive-summary"></p>
+
+            <h2>Introduction</h2>
+            <p id="r-introduction"></p>
+
+            <h2>Claim Details</h2>
+            <p><strong>Patient Name:</strong> <span id="r-name"></span></p>
+            <p><strong>Address:</strong> <span id="r-address"></span></p>
+            <p><strong>Claim Type:</strong> <span id="r-claim-item"></span></p>
+            <p><strong>Medical Facility:</strong> <span id="r-facility"></span></p>
+            <p><strong>Date:</strong> <span id="r-date"></span></p>
+            <p><strong>Total Claim Amount:</strong> <span id="r-amount"></span></p>
+
+            <h2>Claim Description</h2>
+            <p id="r-description"></p>
+
+            <h2>Document Verification</h2>
+            <p id="r-verification"></p>
+
+            <h2>Document Summary</h2>
+            <p id="r-summary"></p>
+
+            <h2>Conclusion</h2>
+            <p id="r-conclusion"></p>
+
+            <details class="policy-evidence">
+              <summary>Policy Evidence</summary>
+              <div id="r-citations" class="citations"></div>
+            </details>
+          </div>
+
+          <button id="back-btn" class="back-btn" type="button">Back</button>
+        </section>
+      </section>
+    </main>
+
+    <script src="/static/app.js?v=blank-claim-form-v1"></script>
+  </body>
+</html>

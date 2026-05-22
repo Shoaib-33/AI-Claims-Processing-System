@@ -1,0 +1,11 @@
+.env
+.git
+.gitignore
+.pytest_cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+insurance
+sample_invoice_*.pdf
+complete_claim_package_*.pdf
