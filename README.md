@@ -1,37 +1,149 @@
-# AI Claims Processing System
+<div align="center">
 
-Health insurance claim processing is often slow, repetitive, and document-heavy. Traditionally, claim reviewers must manually inspect hospital invoices, extract treatment and billing details, search through lengthy insurance policy documents, verify coverage conditions, and justify approval or rejection decisions. This process is time-consuming, costly, and prone to inconsistencies, especially when policy wording is complex or claim details are incomplete.
-AI Claims Processing System is an AI-powered claims adjudication assistant designed to automate this first-pass review workflow.
-Rather than functioning as a simple document Q&A system, the platform uses a multi-stage evidence verification pipeline. Hospital invoices are processed through OCR and structured extraction to capture claim details, which are then matched against insurance policy documents using an advanced retrieval architecture combining hybrid search (BM25 + semantic retrieval), query rewriting, cross-encoder reranking, and Self-RAG style verification.
+# 🏥 AI Claims Processing System
 
-Instead of relying on a single retrieval step, the system performs multiple evidence validation passes—cross-checking treatments, billing details, exclusions, and coverage rules against the policy document before generating a structured claim verdict. If evidence is weak, conflicting, or insufficient, the system escalates the case for human review rather than producing an unreliable decision.
+**An intelligent, evidence-driven insurance claim adjudication platform**
 
-Built with FastAPI, LangChain, FAISS, FlashRank, OCR pipelines, intelligent caching, and optional Redis semantic caching, the platform significantly reduces manual effort and accelerates claim assessment while maintaining decision reliability and human oversight.
+[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green?logo=fastapi)](https://fastapi.tiangolo.com)
+[![LangChain](https://img.shields.io/badge/LangChain-enabled-purple)](https://langchain.com)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)](https://docker.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-  <h2>Key Impact</h2>
-  <ul>
-    <li>Automates first-pass insurance claim review</li>
-    <li>Reduces manual document analysis time</li>
-    <li>Improves decision consistency through evidence-backed validation</li>
-    <li>Adds human-in-the-loop escalation for uncertain cases</li>
-  </ul>
+[**▶ Watch Demo**](https://www.loom.com/share/802c0e92627c4974ad695998c72634f9) · [Report Bug](issues) · [Request Feature](issues)
 
-Project Demo: https://www.loom.com/share/802c0e92627c4974ad695998c72634f9
+</div>
+
+---
+
+## The Problem
+
+Health insurance claim processing is slow, repetitive, and document-heavy. Traditional workflows require claim reviewers to:
+
+- Manually inspect hospital invoices and extract billing details
+- Search through lengthy, complex policy documents
+- Cross-verify treatment codes, exclusions, and coverage conditions
+- Justify every approval or rejection decision — consistently, at scale
+
+This is costly, error-prone, and creates long turnaround times for patients and providers alike.
+
+---
+
+## The Solution
+
+The **AI Claims Processing System** automates the first-pass claim review workflow through a **multi-stage evidence verification pipeline** — not a simple document Q&A bot.
+
+Rather than relying on a single retrieval step, the system performs **multiple evidence validation passes**, cross-checking treatments, billing details, exclusions, and coverage rules before producing a structured verdict. When evidence is weak or conflicting, the system escalates to a human reviewer rather than generating an unreliable decision.
+
+Built with **FastAPI, LangChain, FAISS, FlashRank, OCR pipelines, intelligent caching, and optional Redis semantic caching**, the platform significantly reduces manual effort and accelerates claim assessment while maintaining decision reliability and human oversight.
+
+---
+
+## Key Impact
+
+| | Manual Process | AI-Assisted |
+|---|---|---|
+| First-pass review time | Days – weeks | Minutes |
+| Decision consistency | Variable | Evidence-backed |
+| Reviewer workload | Full document analysis | Escalated edge cases only |
+| Audit trail | Manual notes | Structured, auto-generated |
+
+- ✅ Automates first-pass insurance claim review
+- ✅ Reduces manual document analysis time
+- ✅ Improves decision consistency through evidence-backed validation
+- ✅ Adds human-in-the-loop escalation for uncertain cases
+
+---
 
 ## Highlights
 
-- PDF invoice extraction with a fast PyMuPDF text path.
-- Docling, Tesseract OCR, and LangChain structured extraction fallbacks for harder documents.
-- HTML/CSS/JavaScript claim form that lets the user review extracted fields before submission.
-- LLM retrieval routing with query rewrite, HyDE, multi-query expansion, and step-back questions.
-- Hybrid retrieval over policy chunks:
-  - Dense retrieval with FAISS and Hugging Face embeddings.
-  - Sparse retrieval with BM25.
-  - Reciprocal Rank Fusion to merge result lists.
-- FlashRank cross-encoder reranking before adjudication.
-- Confidence-gated Self-RAG loop with evidence grading, re-retrieval, grounding checks, contradiction checks, and hallucination-risk checks.
-- Upload-field cache, exact decision cache, semantic in-memory cache, optional Redis semantic cache, and a policy document chunk cache.
-- Report UI sections for executive summary, introduction, claim details, document verification, document summary, conclusion, and policy evidence.
+### Document Extraction
+- PDF invoice extraction with a fast **PyMuPDF** text path
+- **Docling**, **Tesseract OCR**, and **LangChain structured extraction** fallbacks for harder documents
+- HTML/CSS/JavaScript claim form for user review of extracted fields before submission
+
+### Retrieval Architecture
+- **LLM retrieval routing** with query rewrite, HyDE, multi-query expansion, and step-back questions
+- **Hybrid retrieval** over policy chunks:
+  - Dense retrieval with FAISS and Hugging Face embeddings
+  - Sparse retrieval with BM25
+  - Reciprocal Rank Fusion to merge result lists
+- **FlashRank cross-encoder reranking** before adjudication
+
+### Decision & Verification
+- **Confidence-gated Self-RAG loop** with evidence grading, re-retrieval, grounding checks, contradiction checks, and hallucination-risk checks
+- Human-in-the-loop escalation for low-confidence or conflicting cases
+
+### Caching
+- Upload-field cache (by file hash)
+- Exact decision cache (by claim + policy version)
+- Semantic in-memory cache for similar repeat claims
+- Optional **Redis semantic cache** for cross-request reuse
+
+### Reporting
+- Structured report sections: executive summary, claim details, document verification, policy evidence, and conclusion
+
+---
+
+## Tech Stack
+
+### API & Backend
+
+| Tool | Role |
+|---|---|
+| **FastAPI** | High-performance REST framework powering all endpoints — invoice extraction, claim processing, and health checks |
+| **Uvicorn** | ASGI server that runs the FastAPI app in both development and Docker environments |
+| **Pydantic** | Data validation and typed schema definitions for all API request and response models |
+
+### LLM Orchestration
+
+| Tool | Role |
+|---|---|
+| **LangChain** | Orchestrates the full RAG pipeline — query rewriting, HyDE generation, multi-query expansion, and structured LLM extraction |
+| **Groq / OpenAI** | Pluggable LLM providers. Groq runs `llama-3.3-70b-versatile` for fast inference; OpenAI is the alternative backend |
+| **Self-RAG loop** | Custom confidence-gated verification pipeline — grades evidence, checks grounding, detects contradictions, and triggers re-retrieval up to 3 iterations |
+
+### Retrieval & Vector Search
+
+| Tool | Role |
+|---|---|
+| **FAISS** | Dense vector similarity search over chunked policy documents. Finds semantically relevant policy clauses at speed |
+| **BM25** | Sparse keyword-based retrieval that captures exact policy terms, billing codes, and condition names embeddings may miss |
+| **Reciprocal Rank Fusion** | Merges BM25 and FAISS result lists into a single unified ranked list before reranking |
+| **Hugging Face Embeddings** | Uses `sentence-transformers/all-MiniLM-L6-v2` to embed policy chunks and claim queries for dense retrieval |
+
+### Reranking
+
+| Tool | Role |
+|---|---|
+| **FlashRank** | Lightweight cross-encoder reranker that re-scores retrieved policy passages by relevance before adjudication — significantly improves evidence precision |
+
+### OCR & Document Extraction
+
+| Tool | Role |
+|---|---|
+| **PyMuPDF** | Primary PDF text extractor. Used first because it is significantly faster than OCR for text-based invoices |
+| **Docling** | Fallback document parser for structured extraction when PyMuPDF cannot find sufficient fields |
+| **Tesseract OCR** | Final fallback for scanned or image-based invoices. Included in the Docker image; optional for local text-PDF workflows |
+
+### Caching
+
+| Layer | Role |
+|---|---|
+| **Upload field cache** | Caches extracted invoice fields by file hash so the claim endpoint reuses prefill data without re-parsing |
+| **Exact decision cache** | Caches full adjudication results keyed by claim data, policy version, and schema version |
+| **Semantic in-memory cache** | Matches semantically similar claims using embedded query comparison, avoiding redundant LLM calls within a session |
+| **Redis** *(optional)* | Persistent semantic cache across app restarts and instances. Activated when `REDIS_URL` is set |
+
+### Frontend & Infrastructure
+
+| Tool | Role |
+|---|---|
+| **HTML / CSS / JavaScript** | Vanilla frontend — renders the claim form, prefills extracted fields, and displays the adjudication report |
+| **Docker** | Full containerisation with Tesseract included. Supports standalone or Redis-networked deployment |
+| **Python 3.11** | Recommended runtime, fully compatible with all dependencies |
+
+---
 
 ## Architecture
 
@@ -71,83 +183,83 @@ flowchart TD
     W --> REP
 ```
 
+---
+
 ## End-To-End Pipeline
 
 1. **Invoice upload and extraction**
-   - `POST /api/extract-invoice` reads the uploaded PDF.
-   - Text PDFs use PyMuPDF first because it is much faster than OCR.
-   - If important prefill fields are missing, the extractor tries Docling. When readable text is still too thin, it uses Tesseract OCR; when parsed fields are still incomplete, it can use LangChain structured extraction.
+   - `POST /api/extract-invoice` reads the uploaded PDF
+   - Text PDFs use PyMuPDF first (faster than OCR)
+   - Falls back to Docling → Tesseract OCR → LangChain structured extraction as needed
 
 2. **Claim review UI**
-   - The browser fills patient name, address, treatment date, facility, diagnosis, and payable amount when extraction succeeds.
-   - The user can correct any field before adjudication.
+   - Browser prefills patient name, address, treatment date, facility, diagnosis, and payable amount
+   - User can correct any field before adjudication
 
 3. **Claim normalization and validation**
-   - `POST /api/process-claim` builds a normalized claim object.
-   - Validation flags catch missing fields, impossible dates, amount mismatches, and addresses that are not clearly within the UK.
+   - `POST /api/process-claim` builds a normalized claim object
+   - Flags missing fields, impossible dates, amount mismatches, and out-of-region addresses
 
 4. **Cache lookup**
-   - Extracted invoice fields are cached by uploaded file hash so the claim endpoint can reuse the fields already obtained during prefill.
-   - Exact cache keys include claim data, policy version, and cache schema version.
-   - Semantic cache compares embedded claim queries for repeat claims with a guard on patient, date, facility, amount, and policy version.
-   - Redis semantic caching is enabled only when `REDIS_URL` is available.
+   - File hash cache reuses extracted fields from the prefill step
+   - Exact cache keys include claim data, policy version, and schema version
+   - Semantic cache compares embedded claim queries for repeat submissions
 
 5. **LLM retrieval routing**
-   - LangChain asks the configured LLM to route the claim and create retrieval questions.
-   - The retrieval plan includes rewritten queries, a HyDE passage, step-back question, required policy topics, and document checks.
+   - LLM generates a retrieval plan: rewritten queries, HyDE passage, step-back question, required policy topics
 
 6. **Advanced retrieval**
-   - The Bupa PDF is split into policy chunks with page and section metadata.
-   - BM25 retrieves keyword-heavy clauses.
-   - FAISS retrieves semantically similar clauses using `sentence-transformers/all-MiniLM-L6-v2`.
-   - Reciprocal Rank Fusion combines sparse and dense rankings.
-   - FlashRank reranks the fused candidate chunks and selects policy evidence.
+   - BM25 (sparse) + FAISS (dense) search over policy chunks
+   - Reciprocal Rank Fusion merges rankings
+   - FlashRank cross-encoder reranks final candidate passages
 
 7. **Decision and Self-RAG**
-   - The first decision draft writes the visible report sections and produces a confidence score.
-   - High-confidence decisions return through a faster path.
-   - Lower-confidence decisions trigger the Self-RAG loop for evidence relevance, sufficiency, grounding, contradiction, and hallucination-risk checks.
-   - Missing evidence questions can trigger policy re-retrieval for up to three iterations.
+   - First draft produces a report and confidence score
+   - High-confidence → fast return path
+   - Low-confidence → Self-RAG loop (evidence grading, grounding, contradiction, hallucination checks, re-retrieval up to 3 iterations)
 
 8. **Report response**
-   - The API returns the decision report, selected policy citations, cache status, and pipeline trace.
-   - The UI renders the report in the centered claim-output layout.
+   - Returns decision report, policy citations, cache status, and pipeline trace
+
+---
 
 ## Project Layout
 
 ```text
 .
-|-- app/
-|   |-- main.py                  # FastAPI app and API endpoints
-|   `-- services/
-|       |-- cache.py             # LRU, semantic, and Redis semantic caches
-|       |-- claims.py            # Decision engine and Self-RAG orchestration
-|       |-- llm.py               # LangChain prompts and LLM provider setup
-|       |-- ocr.py               # PDF extraction and OCR fallbacks
-|       |-- rag.py               # Policy loading, hybrid retrieval, RRF, reranking
-|       `-- schemas.py           # Pydantic request and response models
-|-- data/policies/bupa.pdf       # Policy guide knowledge base
-|-- frontend/                    # HTML/CSS/JavaScript UI
-|-- scripts/                     # Sample invoice PDF generators
-|-- Dockerfile
-|-- requirements.txt
-`-- README.md
+├── app/
+│   ├── main.py                  # FastAPI app and API endpoints
+│   └── services/
+│       ├── cache.py             # LRU, semantic, and Redis semantic caches
+│       ├── claims.py            # Decision engine and Self-RAG orchestration
+│       ├── llm.py               # LangChain prompts and LLM provider setup
+│       ├── ocr.py               # PDF extraction and OCR fallbacks
+│       ├── rag.py               # Policy loading, hybrid retrieval, RRF, reranking
+│       └── schemas.py           # Pydantic request and response models
+├── data/policies/bupa.pdf       # Policy guide knowledge base
+├── frontend/                    # HTML/CSS/JavaScript UI
+├── scripts/                     # Sample invoice PDF generators
+├── Dockerfile
+├── requirements.txt
+└── README.md
 ```
+
+---
 
 ## Requirements
 
-For local development:
+- Python 3.11 (recommended)
+- A Groq API key **or** OpenAI API key
+- Tesseract — only needed locally for scanned/image invoices (included in Docker image)
+- Redis — optional, for cross-request semantic caching
 
-- Python 3.11 is recommended.
-- A Groq API key or OpenAI API key for claim processing.
-- Tesseract installed locally only when scanned invoices need OCR.
-- Redis is optional.
+Text-based PDFs can be extracted without Tesseract.
 
-Text-based PDFs can be extracted without Tesseract. The Docker image includes Tesseract for OCR fallback.
+---
 
 ## Configuration
 
-Create `.env` from `.env.example` and set a real provider key.
+Copy `.env.example` to `.env` and set your provider key:
 
 ```env
 CLAIMS_LLM_PROVIDER=groq
@@ -157,159 +269,120 @@ REDIS_URL=redis://localhost:6379/0
 SELF_RAG_CONFIDENCE_THRESHOLD=0.75
 ```
 
-Supported provider examples:
-
 | Variable | Purpose | Example |
-| --- | --- | --- |
-| `CLAIMS_LLM_PROVIDER` | Claim LLM provider | `groq` or `openai` |
-| `CLAIMS_LLM_MODEL` | Model used by LangChain | `llama-3.3-70b-versatile` |
-| `GROQ_API_KEY` | Groq key when provider is Groq | `gsk_...` |
-| `OPENAI_API_KEY` | OpenAI key when provider is OpenAI | `sk-...` |
+|---|---|---|
+| `CLAIMS_LLM_PROVIDER` | LLM provider | `groq` or `openai` |
+| `CLAIMS_LLM_MODEL` | Model name for LangChain | `llama-3.3-70b-versatile` |
+| `GROQ_API_KEY` | Groq key (if provider is Groq) | `gsk_...` |
+| `OPENAI_API_KEY` | OpenAI key (if provider is OpenAI) | `sk-...` |
 | `REDIS_URL` | Optional Redis semantic cache | `redis://localhost:6379/0` |
-| `SELF_RAG_CONFIDENCE_THRESHOLD` | Initial confidence below which Self-RAG runs | `0.75` |
+| `SELF_RAG_CONFIDENCE_THRESHOLD` | Confidence below which Self-RAG runs | `0.75` |
 
-If `CLAIMS_LLM_PROVIDER` is omitted, the backend tries to infer it from `OPENAI_API_KEY` or `GROQ_API_KEY`.
+If `CLAIMS_LLM_PROVIDER` is omitted, the backend infers it from whichever API key is present.
 
-## Local Setup On Windows
+---
 
-Create and activate the virtual environment:
+## Local Setup (Windows)
 
 ```powershell
+# Create and activate virtual environment
 python -m venv insurance
 .\insurance\Scripts\Activate.ps1
-```
 
-Install dependencies:
-
-```powershell
+# Install dependencies
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-```
 
-Copy environment defaults and edit the key:
-
-```powershell
+# Copy and edit environment config
 Copy-Item .env.example .env
-```
 
-Run the app:
-
-```powershell
+# Run the app
 python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Open:
+Open `http://127.0.0.1:8000` in your browser.
 
-```text
-http://127.0.0.1:8000
-```
+> If port 8000 is in use, add `--port 8001` to the uvicorn command.
 
-If port `8000` is already in use, either stop the existing Uvicorn process or choose another port:
-
-```powershell
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8001
-```
+---
 
 ## Docker
 
-Build the image:
-
 ```powershell
+# Build
 docker build -t ai-claims-processing .
-```
 
-Run it with the local `.env` file:
-
-```powershell
+# Run
 docker run --rm --name ai-claims-processing -p 8000:8000 --env-file .env ai-claims-processing
 ```
 
-Open:
-
-```text
-http://127.0.0.1:8000
-```
-
-### Docker With Redis
-
-Create a small Docker network and start Redis:
+### With Redis
 
 ```powershell
 docker network create claims-net
 docker run -d --name claims-redis --network claims-net redis:7
+
+docker run --rm --name ai-claims-processing \
+  --network claims-net -p 8000:8000 --env-file .env \
+  -e REDIS_URL=redis://claims-redis:6379/0 \
+  ai-claims-processing
 ```
 
-Run the app on the same network:
+---
 
-```powershell
-docker run --rm --name ai-claims-processing --network claims-net -p 8000:8000 --env-file .env -e REDIS_URL=redis://claims-redis:6379/0 ai-claims-processing
-```
+## API Reference
 
-Remove Redis when it is no longer needed:
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/` | Serve the claims UI |
+| `GET` | `/api/health` | Health check |
+| `POST` | `/api/extract-invoice` | Extract invoice fields from uploaded PDF |
+| `POST` | `/api/process-claim` | Process claim and return adjudication report |
 
-```powershell
-docker stop claims-redis
-docker rm claims-redis
-```
+Full interactive docs at `http://localhost:8000/docs`.
+
+---
 
 ## Policy Data
 
-The policy RAG index is created from:
+The RAG index is built from `data/policies/bupa.pdf`. To update:
 
-```text
-data/policies/bupa.pdf
-```
+1. Replace the PDF in `data/policies/`
+2. Restart the backend (policy version change refreshes the chunk cache)
+3. Rebuild the Docker image if the updated PDF should be baked in
 
-To update the policy:
-
-1. Replace `data/policies/bupa.pdf` with the desired PDF.
-2. Restart the backend so the policy version changes and the document cache refreshes.
-3. Rebuild the Docker image if the updated PDF should be baked into the image.
-
-For Docker development, you can also mount the policy directory instead of rebuilding:
+For Docker dev, mount the policy directory instead of rebuilding:
 
 ```powershell
-docker run --rm -p 8000:8000 --env-file .env -v ${PWD}\data\policies:/app/data/policies:ro ai-claims-processing
+docker run --rm -p 8000:8000 --env-file .env \
+  -v ${PWD}\data\policies:/app/data/policies:ro \
+  ai-claims-processing
 ```
 
-The policy guide alone may not contain every member-specific allowance or special condition. The current app adjudicates against the uploaded claim details and the policy PDF supplied to the knowledge base.
-
-## API Summary
-
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| `GET` | `/` | Serve the claims UI |
-| `GET` | `/api/health` | Health check |
-| `POST` | `/api/extract-invoice` | Extract invoice fields from an uploaded PDF |
-| `POST` | `/api/process-claim` | Process claim form fields and optional invoice PDF |
-
-## Sample Workflow
-
-1. Open the claim form.
-2. Upload a hospital invoice PDF.
-3. Review the extracted patient and treatment fields.
-4. Submit the claim.
-5. Read the generated report and policy evidence.
-
-The repository includes sample PDF generators under `scripts/` and sample PDFs in the workspace for manual testing.
+---
 
 ## Performance Notes
 
-- **Fast path:** text PDFs that contain patient, address, date, diagnosis, facility, and payable amount can return prefill fields directly from PyMuPDF parsing.
-- **Slower extraction path:** Docling, OCR, and LLM structured extraction are heavier and may take noticeably longer for scanned or irregular PDFs.
-- **First retrieval warm-up:** Hugging Face embedding and reranking model assets may need to initialize or download the first time retrieval runs in a fresh environment.
-- **Self-RAG cost:** low-confidence cases may make extra LLM calls and re-retrieval passes. Raising `SELF_RAG_CONFIDENCE_THRESHOLD` increases caution; lowering it favors speed.
-- **LLM limits:** Groq or OpenAI quota and rate limits can delay or fail a claim response. Retry after the provider limit resets or choose a model and tier that fit the workload.
-- **Redis:** Redis helps repeated semantically similar claims across app requests when it is configured and available.
+- **Fast path:** text PDFs with all required fields return prefill data directly from PyMuPDF — very fast
+- **Slow path:** Docling, OCR, and LLM extraction are heavier; expect longer latency for scanned or irregular invoices
+- **First run warm-up:** Hugging Face embedding and reranking models may need to download on first retrieval
+- **Self-RAG cost:** low-confidence claims make extra LLM calls; raise `SELF_RAG_CONFIDENCE_THRESHOLD` for more caution, lower it to favour speed
+- **Rate limits:** Groq/OpenAI quota limits can delay responses; retry after reset or choose an appropriate tier
 
-## Production Notes
+---
 
-This project is a claims-processing prototype. A production deployment should add:
+## License
 
-- Authentication and authorization.
-- Secure secret management instead of plain `.env` files.
-- Encryption and retention controls for health and identity data.
-- Audit logging for policy evidence, adjudication inputs, and human overrides.
-- File type, file size, malware, and PDF safety controls.
-- Provider monitoring, timeouts, retries, and rate-limit handling.
-- A human-review workflow for uncertain, mixed, or high-risk claims.
+MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+
+<div align="center">
+
+Built with FastAPI · LangChain · FAISS · FlashRank · Tesseract · Redis
+
+</div>
