@@ -27,6 +27,59 @@ Health insurance claim processing is slow, repetitive, and document-heavy. Tradi
 
 This is costly, error-prone, and creates long turnaround times for patients and providers alike.
 
+### Real-world example: Infosys employee on a Bupa plan
+
+Consider an Infosys employee covered under a corporate Bupa health policy. Today, making a medical claim looks like this:
+
+```
+  Employee (Infosys)                         Bupa claims team
+  ──────────────────────────────────────── │ ─────────────────────────────────────
+                                           │
+  ┌──────────────────────────┐             │
+  │  Medical visit /         │             │
+  │  treatment received      │             │
+  └─────────────┬────────────┘             │
+                │                          │
+  ┌─────────────▼────────────┐             │
+  │  Collect invoice /       │             │
+  │  receipt from clinic     │             │
+  └─────────────┬────────────┘             │
+                │                          │
+  ┌─────────────▼────────────┐  Submitted  │  ┌───────────────────────────────┐
+  │  Manually upload         │ ──────────────► │  Claim received & logged      │
+  │  invoice via portal      │             │  └───────────────┬───────────────┘
+  └──────────────────────────┘             │                  │
+                                           │  ┌───────────────▼───────────────┐
+                                           │  │  Team manually reviews claim  │
+                                           │  │  Policy, eligibility, docs    │
+                                           │  └───────────────┬───────────────┘
+                                           │                  │
+                                           │  ┌───────────────▼───────────────┐
+                                           │  │  Verification & validation    │
+                                           │  │  Cross-check with policy      │
+                                           │  └───────────────┬───────────────┘
+                                           │                  │
+                                           │           ┌──────▼──────┐
+                                           │           │  Approved?  │
+                                           │           └──┬───────┬──┘
+                                           │        Yes ◄─┘       └─► No
+                                           │         │                │
+                                           │  ┌──────▼──────┐  ┌─────▼────────┐
+                                           │  │  Payment    │  │   Rejected   │
+                                           │  │  sent out   │  │ letter sent  │
+                                           │  └──────┬──────┘  └─────┬────────┘
+                                           │         └────────────────┘
+                                           │                  │
+  ┌──────────────────────────┐             │                  │
+  │  Employee notified       │ ◄───────────────────────────────
+  │  via email or portal     │             │
+  └──────────────────────────┘             │
+                                           │
+  ⏱ Average wait: 2 – 6 weeks             │
+```
+
+Every step is manual — the employee has zero visibility into status until the final notification arrives weeks later. This is exactly the workflow the AI Claims Processing System is built to replace.
+
 ---
 
 ## The Solution
@@ -368,6 +421,20 @@ docker run --rm -p 8000:8000 --env-file .env \
 - **First run warm-up:** Hugging Face embedding and reranking models may need to download on first retrieval
 - **Self-RAG cost:** low-confidence claims make extra LLM calls; raise `SELF_RAG_CONFIDENCE_THRESHOLD` for more caution, lower it to favour speed
 - **Rate limits:** Groq/OpenAI quota limits can delay responses; retry after reset or choose an appropriate tier
+
+---
+
+## Production Checklist
+
+This project is a prototype. A production deployment should add:
+
+- [ ] Authentication and authorization
+- [ ] Secure secret management (not plain `.env` files)
+- [ ] Encryption and data retention controls for health and identity data
+- [ ] Audit logging for policy evidence, adjudication inputs, and human overrides
+- [ ] File type, size, malware, and PDF safety controls
+- [ ] Provider monitoring, timeouts, retries, and rate-limit handling
+- [ ] A formal human-review workflow for escalated claims
 
 ---
 
