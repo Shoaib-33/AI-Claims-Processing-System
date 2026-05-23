@@ -10,7 +10,7 @@
 [![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)](https://docker.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-[**▶ Watch Demo**](https://www.loom.com/share/802c0e92627c4974ad695998c72634f9) · [Report Bug](issues) · [Request Feature](issues)
+https://www.loom.com/share/802c0e92627c4974ad695998c72634f9 · [Report Bug](issues) · [Request Feature](issues)
 
 </div>
 
