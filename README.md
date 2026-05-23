@@ -424,19 +424,6 @@ docker run --rm -p 8000:8000 --env-file .env \
 
 ---
 
-## Production Checklist
-
-This project is a prototype. A production deployment should add:
-
-- [ ] Authentication and authorization
-- [ ] Secure secret management (not plain `.env` files)
-- [ ] Encryption and data retention controls for health and identity data
-- [ ] Audit logging for policy evidence, adjudication inputs, and human overrides
-- [ ] File type, size, malware, and PDF safety controls
-- [ ] Provider monitoring, timeouts, retries, and rate-limit handling
-- [ ] A formal human-review workflow for escalated claims
-
----
 
 ## License
 
